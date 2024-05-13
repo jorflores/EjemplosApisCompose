@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
@@ -72,6 +73,18 @@ fun ShellAuthenticatedScreen(navController: NavHostController, viewModel: AppVie
                         scope.launch { drawerState.close() }
                     }
                 )
+                Spacer(Modifier.weight(1f, true))  // This will push the logout item to the bottom
+                Divider()
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "Log Out") },
+                    label = { Text("Log Out") },
+                    selected = false,
+                    onClick = {
+                        viewModel.logoutUser()
+                      //  navController.navigate("main")
+                        scope.launch { drawerState.close() }
+                    }
+                )
             }
         }
     ) {
@@ -116,11 +129,11 @@ fun ShellAuthenticatedScreen(navController: NavHostController, viewModel: AppVie
             }
         ) { contentPadding ->
             Box(modifier = Modifier.padding(contentPadding)) {
-                // AuthenticatedNavHost(navController, "home")
                 NavHost(navController, startDestination = "home") {
-                    composable("home") { HomeScreen() }
+                    composable("home") { HomeScreen(viewModel) }
                     composable("profile") { ProfileScreen() }
                     composable("settings") { SettingsScreen() }
+                   // composable("main") { MainScreen(navController,viewModel) }
                     // Add more composable routes as needed for other parts of the authenticated app
                 }
             }

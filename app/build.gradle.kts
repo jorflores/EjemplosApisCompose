@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+
+    implementation (libs.logging.interceptor)
     implementation (libs.androidx.runtime.livedata)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation (libs.retrofit)

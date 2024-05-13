@@ -141,7 +141,6 @@ fun RegisterScreen(navController: NavController, viewModel: AppViewModel) {
                             message = "Registro exitoso. Redirigiendo a página principal.",
                             duration = SnackbarDuration.Short
                         )
-                        viewModel.authenticateUser(true)
                         navController.navigate("home")
                     } else {
                         snackbarHostState.showSnackbar(

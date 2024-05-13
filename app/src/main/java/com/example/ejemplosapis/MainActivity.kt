@@ -7,8 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val loginviewmodel = AppViewModel(UserServiceApi.instance)
+                    val loginviewmodel = AppViewModel(UserServiceApi.instance,application)
                     val navController = rememberNavController()
                     MainScreen(navController, loginviewmodel)
                 }
@@ -43,9 +42,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(navController: NavHostController, appViewModel: AppViewModel) {
-    val isAuthenticated by appViewModel.isAuthenticated.observeAsState(false)
+    //val isAuthenticated by appViewModel.isAuthenticated.observeAsState(false)
+    val jwtToken = appViewModel.jwtToken.collectAsState()
 
-    if (!isAuthenticated) {
+    if (jwtToken.value.isNullOrBlank()) {
         NavHost(navController = navController, startDestination = "login") {
             composable("login") { LoginScreen(navController, appViewModel) }
             composable("register") { RegisterScreen(navController,appViewModel) }

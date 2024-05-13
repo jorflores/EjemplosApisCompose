@@ -48,6 +48,8 @@ fun LoginScreen(navController: NavController, viewModel: AppViewModel) {
 
 
 
+
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(
@@ -97,7 +99,6 @@ fun LoginScreen(navController: NavController, viewModel: AppViewModel) {
                             message = "Inicio de sesión exitoso. Token: ${result.getOrNull()?.token}",
                             duration = SnackbarDuration.Short
                         )
-                        viewModel.authenticateUser(true)
                         navController.navigate("home")
                     } else {
                         snackbarHostState.showSnackbar(
