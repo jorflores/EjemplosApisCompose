@@ -33,7 +33,7 @@ interface UserServiceApi {
             .create(UserServiceApi::class.java)
     }
 
-    @POST("users/loginToken")
+    @POST("users/login")
     suspend fun loginUser(@Body user: LoginRequest) : LoginResponse
 
     @POST("users/signup")
@@ -43,3 +43,23 @@ interface UserServiceApi {
     suspend fun getAllUsers(@Header("auth") token: String?)  : GetAllUsersResponse
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

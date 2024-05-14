@@ -81,7 +81,6 @@ fun ShellAuthenticatedScreen(navController: NavHostController, viewModel: AppVie
                     selected = false,
                     onClick = {
                         viewModel.logoutUser()
-                      //  navController.navigate("main")
                         scope.launch { drawerState.close() }
                     }
                 )

@@ -19,11 +19,8 @@ class AppViewModel (private val serviceApi: UserServiceApi, application: Applica
 
     private val prefs = application.getSharedPreferences("Settings", Context.MODE_PRIVATE)
 
-  /*  private val _isInitialized = MutableStateFlow(false)
-    val isInitialized = _isInitialized.asStateFlow()*/
-
-     private val _loginResult = MutableStateFlow<Result<LoginResponse>?>(null)
-     val loginResult = _loginResult.asStateFlow()
+    private val _loginResult = MutableStateFlow<Result<LoginResponse>?>(null)
+    val loginResult = _loginResult.asStateFlow()
 
     private val _signupResult = MutableStateFlow<Result<SignupResponse>?>(null)
     val signupResult = _signupResult.asStateFlow()
@@ -34,32 +31,28 @@ class AppViewModel (private val serviceApi: UserServiceApi, application: Applica
     private val _jwtToken = MutableStateFlow(prefs.getString("jwtToken",""))
     val jwtToken = _jwtToken.asStateFlow()
 
+    private val _role = MutableStateFlow(prefs.getBoolean("isAdmin",true))
+    val role = _role.asStateFlow()
 
 
     fun loginUser(user: LoginRequest) {
         _loginResult.value = null
 
         viewModelScope.launch {
-
             try{
                 val response = serviceApi.loginUser(user)
                 _loginResult.value = Result.success(response)
                 setJwtToken(response.token)
-
-
             } catch(e: Exception){
                 _loginResult.value = Result.failure(e)
             }
-
         }
-
     }
 
     fun logoutUser() {
         setJwtToken(null)
         _loginResult.value = null
     }
-
 
     private fun setJwtToken(token: String?) {
 
@@ -76,23 +69,19 @@ class AppViewModel (private val serviceApi: UserServiceApi, application: Applica
             try{
                 val response = serviceApi.registerUser(user)
                 _signupResult.value  =Result.success(response)
+                setJwtToken(response.token)
 
             } catch(e: Exception){
                 _signupResult.value  =Result.failure(e)
             }
-
         }
-
     }
 
-
     fun getAllUsers(){
-
         viewModelScope.launch {
             try{
                 val response = serviceApi.getAllUsers(jwtToken.value)
                 _getAllUsersResult.value  =Result.success(response)
-
             } catch(e: Exception){
                 _getAllUsersResult.value  =Result.failure(e)
             }
