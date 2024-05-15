@@ -10,9 +10,12 @@ import com.example.ejemplosapis.model.LoginResponse
 import com.example.ejemplosapis.model.SignupRequest
 import com.example.ejemplosapis.model.SignupResponse
 import com.example.ejemplosapis.service.UserServiceApi
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+
 
 class AppViewModel (private val serviceApi: UserServiceApi, application: Application) : AndroidViewModel(application) {
 
@@ -71,8 +74,14 @@ class AppViewModel (private val serviceApi: UserServiceApi, application: Applica
                 _signupResult.value  =Result.success(response)
                 setJwtToken(response.token)
 
-            } catch(e: Exception){
-                _signupResult.value  =Result.failure(e)
+            } catch (e: Exception) {
+                if (e is HttpException) {
+                    // Parse the error response
+                    val errorResponse = parseErrorResponse(e)
+                    _signupResult.value = Result.failure(Throwable(errorResponse.message))
+                } else {
+                    _signupResult.value = Result.failure(e)
+                }
             }
         }
     }
@@ -90,3 +99,19 @@ class AppViewModel (private val serviceApi: UserServiceApi, application: Applica
     }
 
 }
+
+
+// Function to parse the error response
+private fun parseErrorResponse(e: HttpException): ErrorResponse {
+    return try {
+        val errorBody = e.response()?.errorBody()?.string()
+        Gson().fromJson(errorBody, ErrorResponse::class.java)
+    } catch (ex: Exception) {
+        ErrorResponse("Unknown error")
+    }
+}
+
+// Data class to model the error response
+data class ErrorResponse(
+    val message: String
+)
