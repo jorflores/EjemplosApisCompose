@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ejemplosapis.model.ExerciseHabits.GetExerciseHabitsRequest
+import com.example.ejemplosapis.model.ExerciseHabits.GetExerciseHabitsResponse
 import com.example.ejemplosapis.model.GetAllUsersResponse
 import com.example.ejemplosapis.model.LoginRequest
 import com.example.ejemplosapis.model.LoginResponse
@@ -24,6 +26,11 @@ class AppViewModel (private val serviceApi: UserServiceApi, application: Applica
 
     private val _loginResult = MutableStateFlow<Result<LoginResponse>?>(null)
     val loginResult = _loginResult.asStateFlow()
+
+    private val _exerciseHabitsResult = MutableStateFlow<Result<GetExerciseHabitsResponse>?>(null)
+    val exerciseHabitsResult = _exerciseHabitsResult.asStateFlow()
+
+
 
     private val _signupResult = MutableStateFlow<Result<SignupResponse>?>(null)
     val signupResult = _signupResult.asStateFlow()
@@ -51,6 +58,20 @@ class AppViewModel (private val serviceApi: UserServiceApi, application: Applica
             }
         }
     }
+
+    fun getExerciseHabits(eh : GetExerciseHabitsRequest){
+        viewModelScope.launch {
+            try{
+                val response = serviceApi.getExerciseHabits(eh)
+                _exerciseHabitsResult.value = Result.success(response)
+
+            } catch(e: Exception){
+                _exerciseHabitsResult.value = Result.failure(e)
+            }
+        }
+    }
+
+
 
     fun logoutUser() {
         setJwtToken(null)

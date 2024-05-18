@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
@@ -73,6 +74,16 @@ fun ShellAuthenticatedScreen(navController: NavHostController, viewModel: AppVie
                         scope.launch { drawerState.close() }
                     }
                 )
+
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Filled.List, contentDescription = "Charts") },
+                    label = { Text(text = "Charts") },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("charts")
+                        scope.launch { drawerState.close() }
+                    }
+                )
                 Spacer(Modifier.weight(1f, true))  // This will push the logout item to the bottom
                 Divider()
                 NavigationDrawerItem(
@@ -132,6 +143,7 @@ fun ShellAuthenticatedScreen(navController: NavHostController, viewModel: AppVie
                     composable("home") { HomeScreen(viewModel) }
                     composable("profile") { ProfileScreen() }
                     composable("settings") { SettingsScreen() }
+                    composable("charts") { ChartScreen(viewModel) }
                    // composable("main") { MainScreen(navController,viewModel) }
                     // Add more composable routes as needed for other parts of the authenticated app
                 }
