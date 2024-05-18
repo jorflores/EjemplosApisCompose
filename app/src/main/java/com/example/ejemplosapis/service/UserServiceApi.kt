@@ -1,5 +1,7 @@
 package com.example.ejemplosapis.service
 
+import com.example.ejemplosapis.model.ExerciseHabits.GetExerciseHabitsRequest
+import com.example.ejemplosapis.model.ExerciseHabits.GetExerciseHabitsResponse
 import com.example.ejemplosapis.model.GetAllUsersResponse
 import com.example.ejemplosapis.model.LoginRequest
 import com.example.ejemplosapis.model.LoginResponse
@@ -41,6 +43,12 @@ interface UserServiceApi {
 
     @GET("users/allUsers")
     suspend fun getAllUsers(@Header("auth") token: String?)  : GetAllUsersResponse
+
+
+    @POST("habits/getExerciseHabit")
+    suspend fun getExerciseHabits(@Body user: GetExerciseHabitsRequest)  : GetExerciseHabitsResponse
+
+
 
 }
 
